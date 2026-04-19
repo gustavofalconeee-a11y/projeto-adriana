@@ -68,8 +68,10 @@ export async function createProductAction(prevState: any, formData: FormData) {
 export async function updateProductAction(prevState: any, formData: FormData) {
     console.log('--- Atualizando produto ---');
     
+    let id: string | null = null;
+
     try {
-        const id = formData.get('id') as string;
+        id = formData.get('id') as string;
         const name = formData.get('name') as string;
         const price = parseFloat(formData.get('price') as string);
         const description = formData.get('description') as string;
@@ -102,9 +104,10 @@ export async function updateProductAction(prevState: any, formData: FormData) {
     }
 
     revalidatePath('/admin/products');
-    revalidatePath(`/catalog/detalhes/${id}`);
+    if (id) revalidatePath(`/catalog/detalhes/${id}`);
     redirect('/admin/products');
 }
+
 
 export async function deleteProductAction(id: string) {
     console.log('--- Excluindo produto ---', id);
