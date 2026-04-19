@@ -27,15 +27,51 @@ const headers = {
 
 export async function getYampiProducts() {
   try {
-    const response = await fetch(`https://api.dooki.com.br/v2/${YAMPI_ALIAS}/catalog/products?include=images,prices,skus,variations,texts,videos`, {
+    // A API da Yampi retorna apenas 10 produtos por padrão.
+    // Usamos o parâmetro `limit` (máx. permitido) e percorremos todas as páginas
+    // para garantir que TODOS os produtos cadastrados apareçam no site.
+    const PER_PAGE = 100; // limite alto para buscar o máximo por requisição
+    const baseUrl = `https://api.dooki.com.br/v2/${YAMPI_ALIAS}/catalog/products?include=images,prices,skus,variations,texts,videos&limit=${PER_PAGE}`;
+
+    // Primeira requisição para obter os dados iniciais + metadata de paginação
+    const firstResponse = await fetch(`${baseUrl}&page=1`, {
       headers,
       next: { revalidate: 3600 }
     });
 
-    if (!response.ok) throw new Error(`Yampi API error: ${response.statusText}`);
+    if (!firstResponse.ok) {
+      throw new Error(`Yampi API error: ${firstResponse.statusText}`);
+    }
 
-    const json = await response.json();
-    return (json.data || []).map((p: any) => mapYampiProduct(p));
+    const firstJson = await firstResponse.json();
+    const allRawProducts: any[] = [...(firstJson.data || [])];
+
+    // Verifica se existem mais páginas através do meta.pagination
+    const totalPages: number = firstJson?.meta?.pagination?.total_pages || 1;
+
+    if (totalPages > 1) {
+      // Faz requisições paralelas para as páginas restantes
+      const pagePromises: Promise<any>[] = [];
+      for (let page = 2; page <= totalPages; page++) {
+        pagePromises.push(
+          fetch(`${baseUrl}&page=${page}`, {
+            headers,
+            next: { revalidate: 3600 }
+          })
+            .then((r) => (r.ok ? r.json() : { data: [] }))
+            .catch(() => ({ data: [] }))
+        );
+      }
+
+      const additionalPages = await Promise.all(pagePromises);
+      for (const pageJson of additionalPages) {
+        if (pageJson?.data?.length) {
+          allRawProducts.push(...pageJson.data);
+        }
+      }
+    }
+
+    return allRawProducts.map((p: any) => mapYampiProduct(p));
   } catch (error) {
     console.error('Error fetching Yampi products:', error);
     return [];
