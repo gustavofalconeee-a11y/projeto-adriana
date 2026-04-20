@@ -1,17 +1,18 @@
 'use client';
 
 import Link from 'next/link';
-import { ShoppingBag, ArrowLeft, Search, Sparkles } from 'lucide-react';
+import { ShoppingBag, ArrowLeft, Search } from 'lucide-react';
 import Image from 'next/image';
 import { useCart } from '@/context/CartContext';
 import { useState, useEffect, useMemo } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Catalog({ products }: { products: any[] }) {
     const { cartCount } = useCart();
     const [isMounted, setIsMounted] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [sortBy, setSortBy] = useState<'default' | 'price-asc' | 'price-desc' | 'name'>('default');
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
 
     useEffect(() => {
         setIsMounted(true);
@@ -43,33 +44,36 @@ export default function Catalog({ products }: { products: any[] }) {
     }, [products, searchTerm, sortBy]);
 
     return (
-        <div className="min-h-screen bg-white text-gray-900 font-sans selection:bg-emerald-100 selection:text-emerald-900">
+        <div className="min-h-screen bg-white text-gray-900 font-sans selection:bg-emerald-900 selection:text-white">
 
             {/* Navigation */}
-            <nav className="w-full bg-white/90 backdrop-blur-md z-50 border-b border-gray-100 sticky top-0">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex justify-between items-center h-20">
+            <nav className="w-full bg-white z-50 border-b border-gray-100 sticky top-0">
+                <div className="max-w-screen-2xl mx-auto px-6 md:px-12">
+                    <div className="flex justify-between items-center h-24">
                         <div className="flex-1">
-                            <Link href="/" className="inline-flex items-center text-[10px] sm:text-xs uppercase tracking-[0.25em] text-gray-500 hover:text-emerald-800 transition duration-300 font-medium">
-                                <ArrowLeft className="w-3.5 h-3.5 mr-2" />
-                                Voltar
+                            <Link href="/" className="group inline-flex items-center text-[10px] uppercase tracking-[0.25em] text-gray-500 hover:text-emerald-900 transition-colors font-medium gap-3">
+                                <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" strokeWidth={1.5} />
+                                Início
                             </Link>
                         </div>
 
                         {/* Logo */}
                         <div className="flex-shrink-0 flex items-center justify-center flex-1">
                             <Link href="/">
-                                <span className="font-serif text-xl sm:text-2xl tracking-[0.2em] text-[#d4af37] font-light uppercase text-center block whitespace-nowrap">
-                                    Alora <span className="text-emerald-800">Acessórios</span>
+                                <span className="font-serif text-2xl tracking-[0.25em] text-gray-900 font-light uppercase text-center block whitespace-nowrap">
+                                    Alora
                                 </span>
                             </Link>
                         </div>
 
                         <div className="flex flex-1 justify-end items-center space-x-6">
-                            <Link href="/cart" className="relative p-2 text-gray-800 hover:text-emerald-800 transition">
+                            <button onClick={() => setIsSearchOpen(!isSearchOpen)} className="p-2 text-gray-400 hover:text-emerald-900 transition-colors">
+                                <Search className="w-5 h-5" strokeWidth={1.5} />
+                            </button>
+                            <Link href="/cart" className="relative p-2 text-gray-400 hover:text-emerald-900 transition-colors">
                                 <ShoppingBag className="w-5 h-5" strokeWidth={1.5} />
                                 {isMounted && cartCount > 0 && (
-                                    <span className="absolute top-0 right-0 bg-emerald-800 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
+                                    <span className="absolute top-1 right-0 bg-[#d4af37] text-white text-[9px] w-4 h-4 flex items-center justify-center font-medium">
                                         {cartCount}
                                     </span>
                                 )}
@@ -79,104 +83,79 @@ export default function Catalog({ products }: { products: any[] }) {
                 </div>
             </nav>
 
-            {/* Hero / Header */}
-            <section className="relative bg-gradient-to-b from-[#f9f9f9] via-white to-white border-b border-gray-100 overflow-hidden">
-                {/* Decorative blurs using brand palette */}
-                <div className="absolute -top-32 -right-32 w-96 h-96 bg-emerald-100/30 rounded-full blur-3xl pointer-events-none" />
-                <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-[#d4af37]/10 rounded-full blur-3xl pointer-events-none" />
-
-                <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-                    <div className="flex flex-col items-center text-center">
-                        <span className="inline-flex items-center gap-2 text-emerald-800 text-[10px] uppercase tracking-[0.35em] font-semibold mb-5">
-                            <Sparkles className="w-3 h-3 text-[#d4af37]" strokeWidth={1.5} />
-                            Coleção Atemporal
-                        </span>
-                        <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-light tracking-tight text-gray-900 leading-tight">
-                            Nossa <span className="italic text-emerald-800">Coleção</span> Completa
-                        </h1>
-
-                        {/* Ornament */}
-                        <div className="flex items-center gap-3 mt-8">
-                            <div className="w-10 h-px bg-gray-300" />
-                            <div className="w-1.5 h-1.5 rotate-45 bg-[#d4af37]" />
-                            <div className="w-10 h-px bg-gray-300" />
-                        </div>
-
-                        <p className="mt-8 text-gray-500 font-light tracking-wide text-center max-w-2xl text-sm sm:text-base leading-relaxed">
-                            Descubra todos os nossos designs exclusivos. Do clássico ao moderno, cada peça é
-                            cuidadosamente produzida com excelência e materiais selecionados.
-                        </p>
-                    </div>
-                </div>
-            </section>
-
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-
-                {/* Filters toolbar */}
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-12 pb-6 border-b border-gray-100">
-                    <div className="text-[11px] uppercase tracking-[0.25em] text-gray-500 font-medium">
-                        <span className="text-gray-900 font-semibold">{filteredProducts.length}</span>
-                        {filteredProducts.length === 1 ? ' Produto' : ' Produtos'}
-                        {products.length !== filteredProducts.length && (
-                            <span className="text-gray-400"> de {products.length}</span>
-                        )}
-                    </div>
-
-                    <div className="flex flex-col sm:flex-row gap-3 sm:items-center">
-                        {/* Search */}
-                        <div className="relative">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-400" strokeWidth={1.5} />
+            {/* Search Bar Animada */}
+            <AnimatePresence>
+                {isSearchOpen && (
+                    <motion.div 
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="bg-[#fafafa] border-b border-gray-100 overflow-hidden"
+                    >
+                        <div className="max-w-screen-2xl mx-auto px-6 md:px-12 py-8">
                             <input
                                 type="text"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                placeholder="Buscar produto..."
-                                className="w-full sm:w-64 pl-9 pr-3 py-2.5 text-xs tracking-wider border border-gray-200 bg-white focus:outline-none focus:border-emerald-800 transition placeholder:text-gray-400"
+                                placeholder="Busque por nome ou estilo..."
+                                className="w-full bg-transparent text-2xl font-serif font-light text-gray-900 placeholder:text-gray-300 focus:outline-none focus:ring-0"
+                                autoFocus
                             />
                         </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
-                        {/* Sort */}
-                        <div className="relative">
-                            <select
-                                value={sortBy}
-                                onChange={(e) => setSortBy(e.target.value as any)}
-                                className="appearance-none w-full sm:w-auto px-4 py-2.5 pr-9 text-[11px] uppercase tracking-[0.2em] border border-gray-200 bg-white text-gray-700 focus:outline-none focus:border-emerald-800 transition cursor-pointer font-medium"
-                            >
-                                <option value="default">Ordenar por</option>
-                                <option value="name">Nome (A-Z)</option>
-                                <option value="price-asc">Menor Preço</option>
-                                <option value="price-desc">Maior Preço</option>
-                            </select>
-                            <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-[10px]">▼</span>
-                        </div>
+            {/* Header do Catálogo */}
+            <section className="pt-24 pb-16 px-6 md:px-12 text-center max-w-screen-2xl mx-auto">
+                <h1 className="text-4xl md:text-5xl font-serif font-light tracking-tight text-gray-900 mb-6">
+                    A <span className="italic text-emerald-900">Coleção</span>
+                </h1>
+                <div className="w-px h-16 bg-[#d4af37]/50 mx-auto mb-8"></div>
+            </section>
+
+            <main className="max-w-screen-2xl mx-auto px-6 md:px-12 pb-32">
+
+                {/* Filters Toolbar */}
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-6 mb-16">
+                    <div className="text-[10px] uppercase tracking-[0.3em] text-gray-400 font-medium">
+                        {filteredProducts.length} Peças
+                    </div>
+
+                    <div className="relative group">
+                        <select
+                            value={sortBy}
+                            onChange={(e) => setSortBy(e.target.value as any)}
+                            className="appearance-none bg-transparent pr-8 text-[10px] uppercase tracking-[0.2em] text-gray-900 font-medium cursor-pointer focus:outline-none border-b border-transparent group-hover:border-emerald-900 transition-colors pb-1"
+                        >
+                            <option value="default">Ordernar: Padrão</option>
+                            <option value="name">Alfabético</option>
+                            <option value="price-asc">Menor Preço</option>
+                            <option value="price-desc">Maior Preço</option>
+                        </select>
+                        <div className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-gray-400 text-[10px] pb-1">▼</div>
                     </div>
                 </div>
 
-                {/* Empty state */}
+                {/* Empty State */}
                 {filteredProducts.length === 0 && (
-                    <div className="text-center py-24">
-                        <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-[#f9f9f9] border border-gray-100 mb-6">
-                            <Search className="w-5 h-5 text-gray-400" strokeWidth={1.5} />
-                        </div>
-                        <p className="text-sm font-serif font-light text-gray-900 mb-2">Nenhum produto encontrado</p>
-                        <p className="text-xs tracking-wider text-gray-500">Tente ajustar sua busca ou filtro.</p>
+                    <div className="text-center py-32">
+                        <p className="text-2xl font-serif font-light text-gray-400 mb-4">Nenhuma peça encontrada.</p>
+                        <button onClick={() => setSearchTerm('')} className="text-[10px] uppercase tracking-[0.2em] text-emerald-900 border-b border-emerald-900 pb-1">
+                            Limpar busca
+                        </button>
                     </div>
                 )}
 
-                {/* Product Grid */}
+                {/* Product Grid - Galeria */}
                 <motion.div
                     initial="hidden"
                     animate="show"
                     variants={{
                         hidden: { opacity: 0 },
-                        show: {
-                            opacity: 1,
-                            transition: {
-                                staggerChildren: 0.06
-                            }
-                        }
+                        show: { opacity: 1, transition: { staggerChildren: 0.1 } }
                     }}
-                    className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-12 sm:gap-x-8 sm:gap-y-16"
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-20"
                 >
                     {filteredProducts.map((product) => {
                         const hasPromotion = product.hasPromotion && product.originalPrice > 0;
@@ -184,16 +163,17 @@ export default function Catalog({ products }: { products: any[] }) {
                             <motion.div
                                 key={product.id}
                                 variants={{
-                                    hidden: { opacity: 0, y: 20 },
+                                    hidden: { opacity: 0, y: 30 },
                                     show: { opacity: 1, y: 0 }
                                 }}
                             >
-                                <Link href={`/catalog/detalhes/${product.id}`} className="group flex flex-col">
-                                    <div className="relative w-full aspect-[4/5] bg-[#f9f9f9] mb-5 overflow-hidden border border-gray-100 group-hover:border-emerald-800/20 transition-colors duration-500">
-                                        {/* Promotion badge (gold) */}
+                                <Link href={`/catalog/detalhes/${product.id}`} className="group flex flex-col h-full">
+                                    <div className="relative w-full aspect-[3/4] bg-[#f4f4f4] mb-6 overflow-hidden">
+                                        
+                                        {/* Promotion badge sutil */}
                                         {hasPromotion && (
-                                            <div className="absolute top-3 left-3 z-30 bg-[#d4af37] text-white text-[9px] uppercase tracking-[0.25em] font-bold px-2.5 py-1">
-                                                Oferta
+                                            <div className="absolute top-4 left-4 z-30 bg-white/90 backdrop-blur-sm text-emerald-900 text-[9px] uppercase tracking-[0.25em] font-medium px-3 py-1.5 border border-emerald-900/10">
+                                                Special
                                             </div>
                                         )}
 
@@ -203,8 +183,8 @@ export default function Catalog({ products }: { products: any[] }) {
                                                 src={(product as any).images[0]}
                                                 alt={product.name}
                                                 fill
-                                                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                                                className="object-contain p-6 group-hover:scale-[1.04] transition-transform duration-[900ms] ease-out"
+                                                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                                                className="object-contain p-8 group-hover:scale-105 transition-transform duration-[1.2s] ease-[cubic-bezier(0.25,0.46,0.45,0.94)]"
                                             />
                                         ) : (
                                             <div className="absolute inset-0 flex items-center justify-center text-gray-300 font-light text-[10px] tracking-[0.3em] uppercase">
@@ -212,50 +192,40 @@ export default function Catalog({ products }: { products: any[] }) {
                                             </div>
                                         )}
 
-                                        {/* Secondary image on hover (if exists) */}
+                                        {/* Imagem Secundária (Hover) */}
                                         {(product as any).images && (product as any).images.length > 1 && (product as any).images[1] && (
                                             <Image
                                                 src={(product as any).images[1]}
                                                 alt={product.name}
                                                 fill
-                                                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                                                className="object-contain p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-out"
+                                                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                                                className="object-contain p-8 opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-out bg-[#f4f4f4]"
                                             />
                                         )}
 
-                                        {/* Overlay Action */}
-                                        <div className="absolute bottom-0 left-0 w-full p-3 sm:p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out z-20">
-                                            <div className="w-full bg-emerald-800 text-white py-3 text-center uppercase tracking-[0.25em] text-[10px] font-semibold shadow-md">
-                                                Ver Detalhes
-                                            </div>
-                                        </div>
-
-                                        {/* subtle gold corner accents on hover */}
-                                        <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                                            <div className="absolute top-2 right-2 w-4 h-4 border-t border-r border-[#d4af37]" />
-                                            <div className="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-[#d4af37]" />
-                                        </div>
+                                        {/* Borda interna de luxo ao passar o mouse */}
+                                        <div className="absolute inset-3 border border-[#d4af37]/0 group-hover:border-[#d4af37]/40 transition-colors duration-700 pointer-events-none z-20"></div>
                                     </div>
 
-                                    {/* Text */}
-                                    <div className="text-center px-1">
+                                    {/* Text Info */}
+                                    <div className="flex flex-col mt-auto">
                                         {product.brand && (
-                                            <p className="text-[9px] uppercase tracking-[0.35em] text-[#d4af37] mb-1.5 font-medium">
+                                            <p className="text-[9px] uppercase tracking-[0.3em] text-gray-400 mb-2 font-medium">
                                                 {product.brand}
                                             </p>
                                         )}
-                                        <h3 className="text-sm sm:text-base font-serif font-light mb-2 text-gray-900 group-hover:text-emerald-800 transition-colors leading-snug line-clamp-2 min-h-[2.5rem]">
+                                        <h3 className="text-base font-serif font-light mb-3 text-gray-900 group-hover:text-emerald-900 transition-colors leading-relaxed">
                                             {product.name}
                                         </h3>
 
                                         {/* Price */}
-                                        <div className="flex items-center justify-center gap-2 mt-2">
+                                        <div className="flex items-center gap-3">
                                             {hasPromotion && (
-                                                <span className="text-[11px] text-gray-400 line-through tracking-wider">
+                                                <span className="text-xs text-gray-400 line-through tracking-wider">
                                                     R$ {Number(product.originalPrice).toFixed(2).replace('.', ',')}
                                                 </span>
                                             )}
-                                            <span className={`text-xs tracking-[0.15em] font-medium ${hasPromotion ? 'text-emerald-800' : 'text-gray-700'}`}>
+                                            <span className={`text-sm tracking-[0.15em] ${hasPromotion ? 'text-emerald-900 font-medium' : 'text-gray-600'}`}>
                                                 R$ {product.price.toFixed(2).replace('.', ',')}
                                             </span>
                                         </div>
@@ -268,25 +238,17 @@ export default function Catalog({ products }: { products: any[] }) {
             </main>
 
             {/* Footer */}
-            <footer className="bg-[#f9f9f9] py-16 px-4 border-t border-gray-100 mt-20">
-                <div className="max-w-7xl mx-auto">
-                    <div className="flex items-center justify-center gap-3 mb-10">
-                        <div className="w-12 h-px bg-gray-300" />
-                        <span className="font-serif text-sm tracking-[0.3em] text-[#d4af37] uppercase">Alora</span>
-                        <div className="w-12 h-px bg-gray-300" />
+            <footer className="bg-[#fafafa] py-12 px-6 md:px-12 border-t border-gray-100">
+                <div className="max-w-screen-2xl mx-auto flex flex-col md:flex-row justify-between items-center text-[9px] font-medium tracking-[0.3em] text-gray-400 uppercase gap-8">
+                    <div>
+                        &copy; {new Date().getFullYear()} ALORA ACESSÓRIOS.
                     </div>
-                    <div className="flex flex-col md:flex-row justify-between items-center text-[10px] font-light tracking-[0.2em] text-gray-500 gap-6 uppercase">
-                        <div className="text-center md:text-left">
-                            &copy; 2026 Alora Acessórios. Todos os direitos reservados.
-                        </div>
-                        <div className="flex space-x-8 font-medium">
-                            <a href="https://www.instagram.com/alora_acessorios_/" target="_blank" rel="noreferrer" className="hover:text-emerald-800 transition">Instagram</a>
-                            <a href="https://wa.me/5521999141006" target="_blank" rel="noreferrer" className="hover:text-emerald-800 transition">WhatsApp</a>
-                        </div>
+                    <div className="flex space-x-12">
+                        <a href="https://www.instagram.com/alora_acessorios_/" target="_blank" rel="noreferrer" className="hover:text-emerald-900 transition-colors">Instagram</a>
+                        <a href="https://wa.me/5521999141006" target="_blank" rel="noreferrer" className="hover:text-emerald-900 transition-colors">WhatsApp</a>
                     </div>
                 </div>
             </footer>
-
         </div>
     );
 }
