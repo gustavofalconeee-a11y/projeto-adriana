@@ -209,93 +209,95 @@ export default function Home() {
             A
           </div>
 
-          <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-14 w-full pt-36 pb-24">
-            <div className="grid lg:grid-cols-12 gap-12 items-center">
-
-              {/* Text column */}
-              <div className="lg:col-span-7">
-                <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.9, ease: 'easeOut' }}>
-
-                  {/* Eyebrow */}
-                  <div className="flex items-center gap-4 mb-12">
-                    <div className="h-px w-10" style={{ background: 'var(--gold)', animation: 'line-in 1s ease 0.3s both' }} />
-                    <span className="text-[9px] uppercase tracking-[0.55em] font-medium" style={{ color: 'var(--gold)' }}>
-                      Coleção Atemporal · 2026
-                    </span>
-                  </div>
-
-                  {/* Headline */}
-                  <h1 className="font-display font-light text-white leading-[0.88] mb-10" style={{ fontSize: 'clamp(4rem, 9vw, 7.5rem)' }}>
-                    Eleve<br />
-                    o seu<br />
-                    <span className="italic gold-text">Estilo</span>
-                  </h1>
-
-                  {/* Divider */}
-                  <div className="w-full h-px mb-10" style={{ background: 'rgba(255,255,255,0.08)' }} />
-
-                  {/* Body */}
-                  <p className="text-sm font-light leading-relaxed max-w-md mb-14" style={{ color: 'rgba(255,255,255,0.42)', letterSpacing: '0.05em' }}>
-                    Bolsas premium que unem elegância atemporal e design minimalista. Cada peça, uma obra de arte construída com obsessão pela excelência.
-                  </p>
-
-                  {/* CTA */}
-                  <div className="flex items-center gap-6">
-                    <Link href="/catalog" className="group flex items-center gap-5">
-                      <div
-                        className="w-14 h-14 flex items-center justify-center transition-all duration-500"
-                        style={{ border: '1px solid rgba(212,175,55,0.35)' }}
-                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = 'var(--gold)'; }}
-                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
-                      >
-                        <ArrowRight className="w-4 h-4 transition-colors duration-300" style={{ color: 'var(--gold)' }} />
-                      </div>
-                      <span
-                        className="text-[9px] uppercase tracking-[0.45em] font-medium transition-colors duration-300"
-                        style={{ color: 'rgba(255,255,255,0.55)' }}
-                      >
-                        Explorar Coleção
-                      </span>
-                    </Link>
-                  </div>
-
-                </motion.div>
+          <div className="relative z-10 w-full pt-36 pb-24 flex flex-col items-center justify-center text-center px-6">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, ease: 'easeOut' }}
+              className="flex flex-col items-center"
+            >
+              {/* Eyebrow */}
+              <div className="flex items-center gap-4 mb-10">
+                <div className="h-px w-10" style={{ background: 'var(--gold)' }} />
+                <span className="text-[9px] uppercase tracking-[0.55em] font-medium" style={{ color: 'var(--gold)' }}>
+                  Coleção Atemporal · 2026
+                </span>
+                <div className="h-px w-10" style={{ background: 'var(--gold)' }} />
               </div>
 
-              {/* Decorative frame — right */}
-              <motion.div
-                initial={{ opacity: 0, x: 24 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 1.1, delay: 0.3 }}
-                className="lg:col-span-5 hidden lg:flex items-center justify-center"
+              {/* Headline — single fluid line, never breaks */}
+              <h1
+                className="font-display font-light text-white leading-[0.9] mb-8 whitespace-nowrap"
+                style={{ fontSize: 'clamp(3rem, 8vw, 7.5rem)' }}
               >
-                <div className="relative w-80 h-[460px]">
-                  {/* Outer frame */}
-                  <div className="absolute inset-0" style={{ border: '1px solid rgba(212,175,55,0.15)' }} />
-                  {/* Inner offset frame */}
-                  <div className="absolute inset-5" style={{ border: '1px solid rgba(212,175,55,0.08)' }} />
+                Eleve o seu <em className="gold-text">Estilo</em>
+              </h1>
 
-                  {/* Center content */}
-                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-5">
-                    <div className="w-px h-14" style={{ background: 'linear-gradient(to bottom, transparent, rgba(212,175,55,0.5))' }} />
-                    <div className="w-6 h-px" style={{ background: 'var(--gold)', opacity: 0.4 }} />
-                    <span className="font-display italic font-light text-5xl" style={{ color: 'rgba(255,255,255,0.04)', letterSpacing: '0.3em' }}>
-                      ALORA
-                    </span>
-                    <div className="w-6 h-px" style={{ background: 'var(--gold)', opacity: 0.4 }} />
-                    <span className="text-[7px] uppercase tracking-[0.8em]" style={{ color: 'rgba(212,175,55,0.3)' }}>
-                      Est. 2024
-                    </span>
-                    <div className="w-px h-14" style={{ background: 'linear-gradient(to bottom, rgba(212,175,55,0.5), transparent)' }} />
-                  </div>
+              {/* Divider ornament */}
+              <div className="flex items-center gap-4 my-8">
+                <div className="h-px w-16" style={{ background: 'rgba(255,255,255,0.1)' }} />
+                <div className="w-1 h-1 rotate-45" style={{ background: 'rgba(212,175,55,0.5)' }} />
+                <div className="h-px w-16" style={{ background: 'rgba(255,255,255,0.1)' }} />
+              </div>
 
-                  {/* Corner accents */}
-                  <div className="absolute corner-tl" /><div className="absolute corner-tr" />
-                  <div className="absolute corner-bl" /><div className="absolute corner-br" />
-                </div>
-              </motion.div>
+              {/* Body */}
+              <p
+                className="text-sm font-light leading-relaxed max-w-lg mb-14"
+                style={{ color: 'rgba(255,255,255,0.42)', letterSpacing: '0.05em' }}
+              >
+                Bolsas premium que unem elegância atemporal e design minimalista.<br />
+                Cada peça, uma obra de arte construída com obsessão pela excelência.
+              </p>
 
-            </div>
+              {/* CTA — visível, com peso, elegante */}
+              <Link
+                href="/catalog"
+                className="group relative inline-flex items-center gap-4 overflow-hidden"
+                style={{
+                  background: 'var(--gold)',
+                  padding: '18px 48px',
+                }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#b8960c'; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'var(--gold)'; }}
+              >
+                {/* Shine sweep on hover */}
+                <span
+                  className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"
+                  style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)' }}
+                />
+                <span
+                  className="relative text-[10px] uppercase tracking-[0.5em] font-semibold"
+                  style={{ color: '#0c1f14', fontFamily: 'Jost, sans-serif' }}
+                >
+                  Explorar Coleção
+                </span>
+                <ArrowRight
+                  className="relative w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"
+                  style={{ color: '#0c1f14' }}
+                />
+              </Link>
+
+              {/* Secondary ghost link */}
+              <Link
+                href="/catalog"
+                className="mt-5 text-[9px] uppercase tracking-[0.45em] font-medium transition-colors duration-300 pb-px"
+                style={{
+                  color: 'rgba(255,255,255,0.3)',
+                  borderBottom: '1px solid rgba(255,255,255,0.15)',
+                }}
+                onMouseEnter={e => {
+                  (e.currentTarget as HTMLElement).style.color = 'rgba(212,175,55,0.8)';
+                  (e.currentTarget as HTMLElement).style.borderBottomColor = 'rgba(212,175,55,0.4)';
+                }}
+                onMouseLeave={e => {
+                  (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.3)';
+                  (e.currentTarget as HTMLElement).style.borderBottomColor = 'rgba(255,255,255,0.15)';
+                }}
+              >
+                Ver todas as peças
+              </Link>
+
+            </motion.div>
           </div>
 
           {/* Scroll nudge */}
